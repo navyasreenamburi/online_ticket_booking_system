@@ -1,7 +1,177 @@
-const express=require("express"),path=require("path"),db=require("./db");
-const app=express();app.use(express.json());app.use(express.static(path.join(__dirname,"public")));
-app.get("/api/movies",async(req,res)=>{try{const [r]=await db.query("SELECT m.*,s.show_id,s.theatre_name,s.show_date,s.show_time,s.ticket_price,s.total_seats FROM movies m LEFT JOIN shows s ON m.movie_id=s.movie_id ORDER BY m.movie_id,s.show_time");res.json(r)}catch(e){console.error(e);res.status(500).json({message:"Database error. Check db.js and run database.sql."})}});
-app.get("/api/shows/:id/seats",async(req,res)=>{try{const [s]=await db.query("SELECT total_seats FROM shows WHERE show_id=?",[req.params.id]);if(!s.length)return res.status(404).json({message:"Show not found"});const [b]=await db.query("SELECT seat_numbers FROM bookings WHERE show_id=? AND booking_status='CONFIRMED'",[req.params.id]);res.json({total_seats:s[0].total_seats,booked_seats:b.flatMap(x=>(x.seat_numbers||"").split(",").filter(Boolean))})}catch(e){res.status(500).json({message:"Could not load seats"})}});
-app.post("/api/bookings",async(req,res)=>{const {name,email,show_id,seat_numbers}=req.body;if(!name?.trim()||!email?.trim()||!show_id||!Array.isArray(seat_numbers)||!seat_numbers.length)return res.status(400).json({message:"Enter name, email, show and select seats"});if(seat_numbers.length>8)return res.status(400).json({message:"Maximum 8 seats per booking"});const c=await db.getConnection();try{await c.beginTransaction();const [s]=await c.query("SELECT * FROM shows WHERE show_id=? FOR UPDATE",[show_id]);if(!s.length)throw Error("Show not found");const seats=seat_numbers.map(String);if(seats.some(x=>!/^S([1-9]|[1-3][0-9]|40)$/.test(x))||new Set(seats).size!==seats.length)throw Error("Invalid seat selection");const [b]=await c.query("SELECT seat_numbers FROM bookings WHERE show_id=? AND booking_status='CONFIRMED'",[show_id]);const used=new Set(b.flatMap(x=>(x.seat_numbers||"").split(",")));const clash=seats.filter(x=>used.has(x));if(clash.length)throw Error(clash.join(", ")+" already booked");const [u]=await c.query("INSERT INTO users(name,email) VALUES(?,?) ON DUPLICATE KEY UPDATE name=VALUES(name)",[name.trim(),email.trim().toLowerCase()]);let uid=u.insertId;if(!uid){const [x]=await c.query("SELECT user_id FROM users WHERE email=?",[email.trim().toLowerCase()]);uid=x[0].user_id}const total=Number(s[0].ticket_price)*seats.length;const [r]=await c.query("INSERT INTO bookings(user_id,show_id,seats,seat_numbers,total_amount,booking_status) VALUES(?,?,?,?,?,'CONFIRMED')",[uid,show_id,seats.length,seats.join(","),total]);await c.commit();res.status(201).json({message:"Booking confirmed!",booking_id:r.insertId,seats,total_amount:total})}catch(e){await c.rollback();res.status(400).json({message:e.message})}finally{c.release()}});
-app.get("/api/bookings",async(req,res)=>{try{const [r]=await db.query("SELECT b.booking_id,b.show_id,u.name,u.email,m.title,s.theatre_name,s.show_date,s.show_time,b.seats,b.seat_numbers,b.total_amount,b.booking_status FROM bookings b JOIN users u ON b.user_id=u.user_id JOIN shows s ON b.show_id=s.show_id JOIN movies m ON s.movie_id=m.movie_id ORDER BY b.booking_id DESC");res.json(r)}catch(e){res.status(500).json({message:"Could not load bookings"})}});
-app.listen(3000,()=>console.log("NavyaFlix running at http://localhost:3000"));
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const rateLimit = require("express-rate-limit");
+const validator = require("validator");
+const db = require("./db");
+
+const app = express();
+app.use(express.json());
+
+// Serve static files from public/
+app.use(express.static(path.join(__dirname, "public")));
+
+// Home page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// ── Rate limiter for booking endpoint ───────────────────────────────────────
+const bookingLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,
+  message: { message: "Too many booking attempts. Please try again later." },
+});
+
+// ── GET /api/movies ─────────────────────────────────────────────────────────
+app.get("/api/movies", async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT m.*, s.show_id, s.theatre_name, s.show_date,
+             s.show_time, s.ticket_price, s.total_seats
+      FROM movies m
+      LEFT JOIN shows s ON m.movie_id = s.movie_id
+      ORDER BY m.movie_id, s.show_time
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database error. Check db.js and run database.sql." });
+  }
+});
+
+// ── GET /api/shows/:id/seats ─────────────────────────────────────────────────
+app.get("/api/shows/:id/seats", async (req, res) => {
+  try {
+    const [show] = await db.query(
+      "SELECT total_seats FROM shows WHERE show_id = ?",
+      [req.params.id]
+    );
+    if (!show.length) return res.status(404).json({ message: "Show not found" });
+
+    const [bookings] = await db.query(
+      "SELECT seat_numbers FROM bookings WHERE show_id = ? AND booking_status = 'CONFIRMED'",
+      [req.params.id]
+    );
+    const bookedSeats = bookings.flatMap(b =>
+      (b.seat_numbers || "").split(",").filter(Boolean)
+    );
+
+    res.json({ total_seats: show[0].total_seats, booked_seats: bookedSeats });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Could not load seats" });
+  }
+});
+
+// ── POST /api/bookings ───────────────────────────────────────────────────────
+app.post("/api/bookings", bookingLimiter, async (req, res) => {
+  const { name, email, show_id, seat_numbers } = req.body;
+
+  // Basic presence validation
+  if (
+    !name?.trim() ||
+    !email?.trim() ||
+    !show_id ||
+    !Array.isArray(seat_numbers) ||
+    !seat_numbers.length
+  ) {
+    return res.status(400).json({ message: "Enter name, email, show and select seats" });
+  }
+
+  // Email format validation
+  if (!validator.isEmail(email.trim())) {
+    return res.status(400).json({ message: "Invalid email address" });
+  }
+
+  if (seat_numbers.length > 8) {
+    return res.status(400).json({ message: "Maximum 8 seats per booking" });
+  }
+
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const [shows] = await conn.query(
+      "SELECT * FROM shows WHERE show_id = ? FOR UPDATE",
+      [show_id]
+    );
+    if (!shows.length) throw new Error("Show not found");
+
+    const seats = seat_numbers.map(String);
+    const validSeatPattern = /^S([1-9]|[1-3][0-9]|40)$/;
+    if (
+      seats.some(s => !validSeatPattern.test(s)) ||
+      new Set(seats).size !== seats.length
+    ) {
+      throw new Error("Invalid seat selection");
+    }
+
+    const [existing] = await conn.query(
+      "SELECT seat_numbers FROM bookings WHERE show_id = ? AND booking_status = 'CONFIRMED'",
+      [show_id]
+    );
+    const taken = new Set(
+      existing.flatMap(b => (b.seat_numbers || "").split(","))
+    );
+    const clashes = seats.filter(s => taken.has(s));
+    if (clashes.length) throw new Error(`${clashes.join(", ")} already booked`);
+
+    // Upsert user
+    const [userResult] = await conn.query(
+      "INSERT INTO users (name, email) VALUES (?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)",
+      [name.trim(), email.trim().toLowerCase()]
+    );
+    let userId = userResult.insertId;
+    if (!userId) {
+      const [found] = await conn.query(
+        "SELECT user_id FROM users WHERE email = ?",
+        [email.trim().toLowerCase()]
+      );
+      userId = found[0].user_id;
+    }
+
+    const totalAmount = Number(shows[0].ticket_price) * seats.length;
+    const [inserted] = await conn.query(
+      "INSERT INTO bookings (user_id, show_id, seats, seat_numbers, total_amount, booking_status) VALUES (?, ?, ?, ?, ?, 'CONFIRMED')",
+      [userId, show_id, seats.length, seats.join(","), totalAmount]
+    );
+
+    await conn.commit();
+    res.status(201).json({
+      message: "Booking confirmed!",
+      booking_id: inserted.insertId,
+      seats,
+      total_amount: totalAmount,
+    });
+  } catch (err) {
+    await conn.rollback();
+    res.status(400).json({ message: err.message });
+  } finally {
+    conn.release();
+  }
+});
+
+// ── GET /api/bookings ────────────────────────────────────────────────────────
+app.get("/api/bookings", async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT b.booking_id, b.show_id, u.name, u.email, m.title,
+             s.theatre_name, s.show_date, s.show_time,
+             b.seats, b.seat_numbers, b.total_amount, b.booking_status
+      FROM bookings b
+      JOIN users u ON b.user_id = u.user_id
+      JOIN shows s ON b.show_id = s.show_id
+      JOIN movies m ON s.movie_id = m.movie_id
+      ORDER BY b.booking_id DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Could not load bookings" });
+  }
+});
+
+// ── Start server ─────────────────────────────────────────────────────────────
+const port = Number(process.env.PORT) || 3000;
+app.listen(port, () => console.log(`NavyaFlix running at http://localhost:${port}`));

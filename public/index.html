@@ -1,6 +1,124 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NavyaFlix | Movie Ticket Booking</title><link rel="stylesheet" href="style.css"></head><body>
-<header><a class="brand" href="#">✦ NAVYA<span>FLIX</span></a><nav><a href="#movies">Movies</a><a href="#booking">Book Tickets</a><a href="#history">My Bookings</a></nav><a class="navbtn" href="#movies">BOOK A MOVIE ↗</a></header>
-<main><section class="hero"><div class="copy"><small>✦ &nbsp; THE BIG SCREEN EXPERIENCE</small><h1>Every story deserves<br>a <i>big screen.</i></h1><p>Find your next favourite movie. Pick your show, choose your seats and make it a movie night.</p><a class="goldbtn" href="#movies">Explore Movies &nbsp; →</a><div class="stats"><b>05<small>FEATURED FILMS</small></b><b>40<small>SEATS PER SCREEN</small></b><b>24/7<small>ONLINE BOOKING</small></b></div></div><div class="heroart"><div class="featureposter"><small>NOW SHOWING</small><strong>KALKI<br><em>2898 AD</em></strong><span>✦</span></div><div class="ticket">✦ &nbsp; MOVIE NIGHT<br><b>YOUR SEAT<br>IS WAITING.</b></div></div></section>
-<section class="section" id="movies"><div class="heading"><div><small>PICK YOUR EXPERIENCE</small><h2>Movies on the <i>big screen</i></h2><p>Explore our featured collection and watch the trailers.</p></div><span id="movieCount">Loading films...</span></div><div id="movieGrid" class="movies">Loading movies...</div></section>
-<section class="section dark" id="booking"><div class="heading"><div><small>YOUR NIGHT, YOUR CHOICE</small><h2>Book your <i>tickets</i></h2><p>Choose a show and select your favourite seats.</p></div></div><div class="bookinglayout"><div class="bookcard"><h3>01 &nbsp; Choose your show</h3><label>AVAILABLE MOVIE SHOWS<select id="showSelect"><option value="">Select a movie show</option></select></label><h3>02 &nbsp; Select your seats</h3><div class="legend">🟦 Available &nbsp; 🟩 Selected &nbsp; ⬛ Booked</div><div class="screen">SCREEN THIS WAY</div><div id="seatGrid" class="seats">Select a show to view seats.</div><h3>03 &nbsp; Your details</h3><div class="fields"><label>FULL NAME<input id="customerName" placeholder="Your name"></label><label>EMAIL ADDRESS<input id="customerEmail" type="email" placeholder="you@example.com"></label></div><div class="total"><span id="seatSummary">0 seats selected</span><b id="totalAmount">₹0.00</b></div><button id="confirmBtn" class="goldbtn full">Confirm Booking →</button><p id="bookingMessage" aria-live="polite"></p></div><aside><small>✦ THE NAVYAFLIX PROMISE</small><h2>Your perfect<br>movie moment.</h2><p>From choosing your show to picking the perfect seat, your cinema plan is just a few clicks away.</p><p>✓ Live seat availability</p><p>✓ Instant booking confirmation</p><p>✓ Booking saved in MySQL</p><small>DEMO PROJECT · SAMPLE THEATRE DATA</small></aside></div></section>
-<section class="section" id="history"><div class="heading"><div><small>ALL YOUR PLANS IN ONE PLACE</small><h2>Recent <i>bookings</i></h2><p>Booking records saved in your MySQL database.</p></div><button id="refreshBookings">↻ Refresh</button></div><div class="tablewrap"><table><thead><tr><th>ID</th><th>CUSTOMER</th><th>MOVIE</th><th>THEATRE / SHOW</th><th>SEATS</th><th>AMOUNT</th><th>STATUS</th></tr></thead><tbody id="bookingRows"><tr><td colspan="7">Loading...</td></tr></tbody></table></div></section></main><footer>✦ NAVYAFLIX <span>ONLINE MOVIE TICKET BOOKING SYSTEM · 2026</span></footer><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home | NavyaFlix</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="index.html">✦ NAVYA<span>FLIX</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book Tickets</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="navbtn" href="movies.html">BOOK A MOVIE ↗</a>
+  </header>
+
+  <main>
+
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="copy">
+        <small>✦ &nbsp; YOUR NEXT MOVIE NIGHT STARTS HERE</small>
+        <h1>Great movies.<br>Better seats.<br><i>Zero queues.</i></h1>
+        <p>Discover audience favourites, find a show and book your seats online in just a few clicks.</p>
+        <div class="hero-actions">
+          <a class="goldbtn" href="movies.html">Explore Movies &nbsp; →</a>
+          <a class="text-link" href="booking.html">Go straight to booking ↗</a>
+        </div>
+        <div class="stats">
+          <b>05<small>FEATURED MOVIES</small></b>
+          <b>40<small>SEATS PER SHOW</small></b>
+          <b>ANYTIME<small>ONLINE BOOKING</small></b>
+        </div>
+      </div>
+      <div class="heroart" aria-hidden="true">
+        <div class="featureposter">
+          <small>NOW SHOWING</small>
+          <strong>KALKI<br><em>2898 AD</em></strong>
+          <span>✦</span>
+        </div>
+        <div class="ticket">✦ &nbsp; MOVIE NIGHT<br><b>YOUR SEAT<br>IS WAITING.</b></div>
+      </div>
+    </section>
+
+    <!-- ── Top picks ──────────────────────────────────────────────────────── -->
+    <section class="section home-picks">
+      <div class="heading">
+        <div>
+          <small>THE CROWD-PLEASERS</small>
+          <h2>Top-rated <i>movie picks</i></h2>
+          <p>Pick a favourite, watch its trailer or head straight to booking.</p>
+        </div>
+        <a class="section-link" href="movies.html">View all movies →</a>
+      </div>
+      <div id="topMovies" class="movies top-movies" aria-live="polite">
+        <p class="loading-movies">Loading top movie picks...</p>
+      </div>
+      <p class="rating-note">Ratings shown are sample demo ratings, not customer reviews.</p>
+    </section>
+
+    <!-- ── Why NavyaFlix ──────────────────────────────────────────────────── -->
+    <section class="section why-section">
+      <div class="heading">
+        <div>
+          <small>YOUR MOVIE NIGHT, MADE SIMPLE</small>
+          <h2>Why choose <i>NavyaFlix?</i></h2>
+          <p>Spend less time planning and more time enjoying the movie.</p>
+        </div>
+      </div>
+      <div class="benefits">
+        <article class="benefit">
+          <span>01</span>
+          <h3>Book from anywhere</h3>
+          <p>Browse films and shows online without waiting at the theatre counter.</p>
+        </article>
+        <article class="benefit">
+          <span>02</span>
+          <h3>Choose your own seats</h3>
+          <p>See available seats, pick your favourites and get the ticket total upfront.</p>
+        </article>
+        <article class="benefit">
+          <span>03</span>
+          <h3>Quick, clear booking</h3>
+          <p>Confirm your details and get an instant booking confirmation on screen.</p>
+        </article>
+        <article class="benefit">
+          <span>04</span>
+          <h3>Keep plans together</h3>
+          <p>Check your saved bookings later from the My Bookings page.</p>
+        </article>
+      </div>
+
+      <!-- CTA strip -->
+      <div class="home-cta">
+        <div>
+          <small>YOUR NEXT BIG-SCREEN MOMENT</small>
+          <h2>Ready to pick your movie?</h2>
+        </div>
+        <a class="goldbtn" href="movies.html">Browse movies &nbsp; →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span class="footer-brand">✦ NAVYAFLIX</span>
+    <span class="footer-links">
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </span>
+    <span class="footer-copy">ONLINE MOVIE TICKET BOOKING SYSTEM · 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

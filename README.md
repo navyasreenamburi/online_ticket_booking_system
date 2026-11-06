@@ -3,8 +3,10 @@
 Full-stack mini project using HTML, CSS, JavaScript, Express.js, Node.js and MySQL.
 
 ## Features
-- Five preloaded movie records with locally stored poster artwork
-- Trailer buttons (opens YouTube search for the official trailer)
+- Five preloaded movie records with locally stored poster images
+- Home page with top-rated movie picks and platform benefits
+- Separate home, movies, booking, booking history and contact pages
+- Trailer buttons that open the movie trailers on YouTube
 - Sample theatres, show dates and show timings
 - Interactive seat selection and automatic price calculation
 - Customer details, booking confirmation and booking history
@@ -24,7 +26,7 @@ Extra support fields: movies.poster_url, movies.trailer_url, movies.description;
 3. Open this folder in VS Code. In Terminal run `npm install` then `npm start`.
 4. Open http://localhost:3000.
 
-The movie posters are original decorative SVG artwork, not official studio posters. Trailer links open YouTube search results so you can choose the official trailer. Theatre and show entries are sample demonstration data.
+The home page highlights rated movie picks and explains the platform features. Movie cards load the five locally stored poster images directly from `public/posters`. Use the navigation to open the separate Movies, Book Tickets, My Bookings and Contact pages. Trailer buttons open the movie trailer on YouTube. Theatre, show entries and home-page ratings are sample demonstration data.
 
 ## GitHub upload
 Create an empty repository named `navyaflix-online-movie-ticket-booking`, then run:

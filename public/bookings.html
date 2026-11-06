@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Bookings | NavyaFlix</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">✦ NAVYA<span>FLIX</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book Tickets</a>
+      <a href="bookings.html" aria-current="page">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="navbtn" href="booking.html">BOOK A MOVIE ↗</a>
+  </header>
+
+  <main class="section page-section">
+    <div class="heading">
+      <div>
+        <small>ALL YOUR PLANS IN ONE PLACE</small>
+        <h2>Recent <i>bookings</i></h2>
+        <p>Booking records saved in your database.</p>
+      </div>
+      <button id="refreshBookings" type="button">↻ Refresh</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>CUSTOMER</th>
+            <th>MOVIE</th>
+            <th>THEATRE / SHOW</th>
+            <th>SEATS</th>
+            <th>AMOUNT</th>
+            <th>STATUS</th>
+          </tr>
+        </thead>
+        <tbody id="bookingRows">
+          <tr><td colspan="7">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-brand">✦ NAVYAFLIX</span>
+    <span class="footer-links">
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </span>
+    <span class="footer-copy">ONLINE MOVIE TICKET BOOKING SYSTEM · 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

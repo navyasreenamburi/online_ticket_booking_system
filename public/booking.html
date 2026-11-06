@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Tickets | NavyaFlix</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">✦ NAVYA<span>FLIX</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="booking.html" aria-current="page">Book Tickets</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="navbtn" href="movies.html">BROWSE MOVIES ↗</a>
+  </header>
+
+  <main class="section dark page-section">
+    <div class="heading">
+      <div>
+        <small>YOUR NIGHT, YOUR CHOICE</small>
+        <h2>Book your <i>tickets</i></h2>
+        <p>Choose a show and select your favourite seats.</p>
+      </div>
+    </div>
+    <div class="bookinglayout">
+      <div class="bookcard">
+        <h3>01 &nbsp; Choose your show</h3>
+        <label>AVAILABLE MOVIE SHOWS
+          <select id="showSelect"><option value="">Loading shows...</option></select>
+        </label>
+        <h3>02 &nbsp; Select your seats</h3>
+        <div class="legend">🟦 Available &nbsp; 🟩 Selected &nbsp; ⬛ Booked</div>
+        <div class="screen">SCREEN THIS WAY</div>
+        <div id="seatGrid" class="seats">Select a show to view seats.</div>
+        <h3>03 &nbsp; Your details</h3>
+        <div class="fields">
+          <label>FULL NAME<input id="customerName" placeholder="Your name" autocomplete="name"></label>
+          <label>EMAIL ADDRESS<input id="customerEmail" type="email" placeholder="you@example.com" autocomplete="email"></label>
+        </div>
+        <div class="total">
+          <span id="seatSummary">0 seats selected</span>
+          <b id="totalAmount">₹0.00</b>
+        </div>
+        <button id="confirmBtn" class="goldbtn full" type="button">Confirm Booking →</button>
+        <p id="bookingMessage" aria-live="polite"></p>
+      </div>
+      <aside>
+        <small>✦ THE NAVYAFLIX PROMISE</small>
+        <h2>Your perfect<br>movie moment.</h2>
+        <p>From choosing your show to picking the perfect seat, your cinema plan is just a few clicks away.</p>
+        <ul class="aside-list">
+          <li><span class="check">✓</span> Live seat availability</li>
+          <li><span class="check">✓</span> Instant booking confirmation</li>
+          <li><span class="check">✓</span> Booking saved securely</li>
+          <li><span class="check">✓</span> Up to 8 seats per booking</li>
+        </ul>
+        <small>DEMO PROJECT · SAMPLE THEATRE DATA</small>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-brand">✦ NAVYAFLIX</span>
+    <span class="footer-links">
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </span>
+    <span class="footer-copy">ONLINE MOVIE TICKET BOOKING SYSTEM · 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

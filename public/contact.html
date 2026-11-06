@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | NavyaFlix</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">✦ NAVYA<span>FLIX</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book Tickets</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+    </nav>
+    <a class="navbtn" href="booking.html">BOOK A MOVIE ↗</a>
+  </header>
+
+  <main>
+
+    <!-- ── Contact Hero ───────────────────────────────────────────────────── -->
+    <section class="contact-hero">
+      <div class="contact-hero-inner">
+        <small>✦ &nbsp; WE'RE HERE TO HELP</small>
+        <h1>Get in touch with <i>NavyaFlix</i></h1>
+        <p>Have a question about your booking, a suggestion, or just want to say hello? We'd love to hear from you.</p>
+      </div>
+      <div class="contact-hero-deco" aria-hidden="true">
+        <span class="deco-ring"></span>
+        <span class="deco-ring deco-ring--sm"></span>
+        <span class="deco-star">✦</span>
+      </div>
+    </section>
+
+    <!-- ── Contact Info Cards ─────────────────────────────────────────────── -->
+    <section class="section contact-section">
+      <div class="contact-grid">
+
+        <!-- Phone -->
+        <div class="contact-info-card">
+          <div class="contact-icon">📞</div>
+          <small>CALL US ANYTIME</small>
+          <h3>Phone Support</h3>
+          <p>Reach us directly for urgent booking queries or last-minute changes. Available 9 AM – 9 PM daily.</p>
+          <a href="tel:1234567897" class="contact-link">+91 1234 567 897</a>
+        </div>
+
+        <!-- Email -->
+        <div class="contact-info-card">
+          <div class="contact-icon">✉️</div>
+          <small>WRITE TO US</small>
+          <h3>Email Support</h3>
+          <p>Send us your questions, feedback or booking issues. We reply within 24 hours on working days.</p>
+          <a href="mailto:onlineticketbookingplatform@gmail.com" class="contact-link">onlineticketbookingplatform<wbr>@gmail.com</a>
+        </div>
+
+        <!-- Location -->
+        <div class="contact-info-card">
+          <div class="contact-icon">📍</div>
+          <small>OUR THEATRES</small>
+          <h3>Locations</h3>
+          <p>NavyaFlix partners with theatres across the city. Check the booking page for available venues near you.</p>
+          <a href="booking.html" class="contact-link">View theatres →</a>
+        </div>
+
+        <!-- Hours -->
+        <div class="contact-info-card">
+          <div class="contact-icon">🕘</div>
+          <small>BOOKING HOURS</small>
+          <h3>Always Open</h3>
+          <p>Our online booking platform is available 24 / 7. Book your seats any time, from anywhere.</p>
+          <a href="booking.html" class="contact-link">Book now →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Contact Form ───────────────────────────────────────────────────── -->
+    <section class="section contact-form-section dark">
+      <div class="contact-form-wrap">
+
+        <div class="contact-form-left">
+          <small>✦ &nbsp; SEND A MESSAGE</small>
+          <h2>Drop us a <i>note</i></h2>
+          <p>Fill in the form and our team will get back to you within one business day.</p>
+          <ul class="contact-promises">
+            <li><span class="check">✓</span> Quick response within 24 hours</li>
+            <li><span class="check">✓</span> Dedicated booking support</li>
+            <li><span class="check">✓</span> Friendly, helpful team</li>
+          </ul>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-row">
+            <label>
+              FULL NAME
+              <input type="text" id="contactName" placeholder="Your full name" autocomplete="name">
+            </label>
+            <label>
+              EMAIL ADDRESS
+              <input type="email" id="contactEmail" placeholder="you@example.com" autocomplete="email">
+            </label>
+          </div>
+          <label>
+            SUBJECT
+            <input type="text" id="contactSubject" placeholder="e.g. Booking cancellation query">
+          </label>
+          <label>
+            MESSAGE
+            <textarea id="contactMessage" rows="5" placeholder="Tell us how we can help…"></textarea>
+          </label>
+          <div class="form-footer">
+            <button type="submit" class="goldbtn" id="contactSubmitBtn">Send Message →</button>
+            <p id="contactFormMsg" aria-live="polite"></p>
+          </div>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- ── FAQ strip ──────────────────────────────────────────────────────── -->
+    <section class="section faq-section">
+      <div class="heading">
+        <div>
+          <small>QUICK ANSWERS</small>
+          <h2>Frequently asked <i>questions</i></h2>
+        </div>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Can I cancel or change my booking?</summary>
+          <p>At the moment NavyaFlix is a demo project. In a live system you would be able to cancel up to 2 hours before the show and receive a full refund.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How many seats can I book at once?</summary>
+          <p>You can book up to 8 seats per booking. For group bookings of more than 8, please contact us directly.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What payment methods are accepted?</summary>
+          <p>This is a demo project, so no real payment is processed. In production, we would support UPI, credit / debit cards and net banking.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Where can I find my booking confirmation?</summary>
+          <p>All confirmed bookings appear on the <a href="bookings.html">My Bookings</a> page immediately after checkout.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Which theatres does NavyaFlix cover?</summary>
+          <p>NavyaFlix lists shows across multiple partner theatres. Visit the <a href="booking.html">Book Tickets</a> page to see all available venues and showtimes.</p>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span class="footer-brand">✦ NAVYAFLIX</span>
+    <span class="footer-links">
+      <a href="movies.html">Movies</a>
+      <a href="booking.html">Book</a>
+      <a href="bookings.html">My Bookings</a>
+      <a href="contact.html">Contact</a>
+    </span>
+    <span class="footer-copy">ONLINE MOVIE TICKET BOOKING SYSTEM · 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // ── Contact form (client-side only for demo) ────────────────────────────
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const btn = document.getElementById("contactSubmitBtn");
+      const msg = document.getElementById("contactFormMsg");
+      const name    = document.getElementById("contactName").value.trim();
+      const email   = document.getElementById("contactEmail").value.trim();
+      const subject = document.getElementById("contactSubject").value.trim();
+      const message = document.getElementById("contactMessage").value.trim();
+
+      if (!name || !email || !subject || !message) {
+        msg.className  = "error";
+        msg.textContent = "Please fill in all fields before sending.";
+        return;
+      }
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!emailOk) {
+        msg.className  = "error";
+        msg.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = "Sending…";
+      msg.className   = "";
+      msg.textContent = "";
+
+      // Simulate send (demo — no backend email endpoint)
+      setTimeout(() => {
+        msg.className  = "success";
+        msg.textContent = "✓ Thank you, " + name + "! Your message has been received. We'll reply soon.";
+        this.reset();
+        btn.disabled    = false;
+        btn.textContent = "Send Message →";
+      }, 1200);
+    });
+  </script>
+</body>
+</html>
